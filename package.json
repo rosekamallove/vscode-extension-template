@@ -11,6 +11,7 @@
   ],
   "activationEvents": [
     "onCommand:vodoo.helloWorld",
+    "onCommand:vodoo.refresh",
     "onCommand:vodoo.askQuestion"
   ],
   "main": "./dist/extension.js",
@@ -24,6 +25,11 @@
         "command": "vodoo.askQuestion",
         "category": "Vodoo",
         "title": "Ask Question"
+      },
+      {
+        "command": "vodoo.refresh",
+        "category": "Vodoo",
+        "title": "Refresh"
       }
     ]
   },

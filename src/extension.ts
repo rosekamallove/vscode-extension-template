@@ -2,28 +2,40 @@ import * as vscode from "vscode";
 import { HelloWorldPanel } from "./HelloWorldPanel";
 
 export function activate(context: vscode.ExtensionContext) {
-	console.log('Congratulations, your extension "vodoo" is now active!');
+  console.log('Congratulations, your extension "vodoo" is now active!');
 
-	context.subscriptions.push(
-		vscode.commands.registerCommand("vodoo.helloWorld", () => {
-			HelloWorldPanel.createOrShow(context.extensionUri);
-		})
-	);
-	context.subscriptions.push(
-		vscode.commands.registerCommand("vodoo.askQuestion", async () => {
-			const answer = await vscode.window.showInformationMessage(
-				"how was your day?",
-				"good",
-				"bad",
-				"meh"
-			);
-			if (answer === "bad") {
-				console.log('sorry to hear that')
-			} else {
-				console.log(answer)
-			}
-		})
-	);
+  context.subscriptions.push(
+    vscode.commands.registerCommand("vodoo.helloWorld", () => {
+      HelloWorldPanel.createOrShow(context.extensionUri);
+    })
+  );
+
+  context.subscriptions.push(
+    vscode.commands.registerCommand("vodoo.refresh", () => {
+      HelloWorldPanel.kill();
+      HelloWorldPanel.createOrShow(context.extensionUri);
+      setTimeout(() => {
+        vscode.commands.executeCommand(
+          "workbench.action.webview.openDeveloperTools"
+        );
+      }, 500);
+    })
+  );
+  context.subscriptions.push(
+    vscode.commands.registerCommand("vodoo.askQuestion", async () => {
+      const answer = await vscode.window.showInformationMessage(
+        "how was your day?",
+        "good",
+        "bad",
+        "meh"
+      );
+      if (answer === "bad") {
+        console.log("sorry to hear that");
+      } else {
+        console.log(answer);
+      }
+    })
+  );
 }
 
-export function deactivate() { }
+export function deactivate() {}

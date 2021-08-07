@@ -1,1 +1,1 @@
-<h1>Hello world From Svelte</h1>
+<h1>Hello world From</h1>
