@@ -9,6 +9,28 @@ export function activate(context: vscode.ExtensionContext) {
   );
 
   context.subscriptions.push(
+    vscode.commands.registerCommand("vodoo.addTodo", () => {
+      const { activeTextEditor } = vscode.window;
+      if (!activeTextEditor) {
+        vscode.window.showErrorMessage("Nothing selected from the editor");
+        return;
+      }
+
+      const text = activeTextEditor.document.getText(
+        activeTextEditor.selection
+      );
+      if (!text) {
+        vscode.window.showErrorMessage("Nothing selected from the editor");
+        return;
+      }
+      sidebarProvider._view?.webview.postMessage({
+        type: "add-todo",
+        value: text,
+      });
+    })
+  );
+
+  context.subscriptions.push(
     vscode.commands.registerCommand("vodoo.helloWorld", () => {
       HelloWorldPanel.createOrShow(context.extensionUri);
     })

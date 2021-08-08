@@ -1,7 +1,18 @@
 <script lang="ts">
-  let count = 0;
+  import { onMount } from "svelte";
+
   let todos: Array<{ text: string; completed: boolean }> = [];
   let text = "";
+
+  onMount(() => {
+    window.addEventListener("message", (e) => {
+      const message = e.data;
+      switch (message.type) {
+        case "add-todo":
+          todos = [{ text: message.value, completed: false }, ...todos];
+      }
+    });
+  });
 </script>
 
 <main>

@@ -13,6 +13,7 @@
     "onCommand:vodoo.helloWorld",
     "onCommand:vodoo.refresh",
     "onCommand:vodoo.askQuestion",
+    "onCommand:vodoo.addTodo",
     "onCommand:vodoo-sidebar"
   ],
   "main": "./dist/extension.js",
@@ -51,6 +52,11 @@
         "command": "vodoo.refresh",
         "category": "Vodoo",
         "title": "Refresh"
+      },
+      {
+        "command": "vodoo.addTodo",
+        "category": "Vodoo",
+        "title": "Add Todo from Selection"
       }
     ]
   },
