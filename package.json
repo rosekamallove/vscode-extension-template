@@ -12,21 +12,22 @@
   "activationEvents": [
     "onCommand:vodoo.helloWorld",
     "onCommand:vodoo.refresh",
-    "onCommand:vodoo.askQuestion"
+    "onCommand:vodoo.askQuestion",
+    "onCommand:vodoo-sidebar"
   ],
   "main": "./dist/extension.js",
   "contributes": {
     "viewsContainers": {
       "activitybar": [
         {
-          "id": "vodoo-sidebar-view",
+          "id": "vodoo-sidebar",
           "title": "Vodoo",
           "icon": "media/checklist.svg"
         }
       ]
     },
     "views": {
-      "vodoo-sidebar-view": [
+      "vodoo-sidebar": [
         {
           "type": "webview",
           "id": "vodoo-sidebar",

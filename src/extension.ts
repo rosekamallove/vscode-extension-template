@@ -7,6 +7,7 @@ export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(
     vscode.window.registerWebviewViewProvider("vodoo-sidebar", sidebarProvider)
   );
+
   context.subscriptions.push(
     vscode.commands.registerCommand("vodoo.helloWorld", () => {
       HelloWorldPanel.createOrShow(context.extensionUri);
@@ -19,7 +20,7 @@ export function activate(context: vscode.ExtensionContext) {
       //HelloWorldPanel.createOrShow(context.extensionUri);
       await vscode.commands.executeCommand("workbench.action.closeSidebar");
       await vscode.commands.executeCommand(
-        "workbench.view.extension.vodoo-sidebar-view"
+        "workbench.view.extension.vodoo-sidebar"
       );
       setTimeout(() => {
         vscode.commands.executeCommand(
