@@ -1,5 +1,6 @@
 import express from "express";
 import admin from "firebase-admin";
+import jwt from "jsonwebtoken";
 import passport from "passport";
 import { Strategy as GitHubStrategy } from "passport-github";
 require("dotenv-safe");
@@ -38,8 +39,11 @@ const todos: Array<{ text: string; completed: boolean }> = [
       (_, __, profile, cb) => {
         console.log(profile);
         cb(null, {
-          accesToken: "ksdjfaskdfjk",
-          refresToken: "kasdjfalskdfjale",
+          accesToken: jwt.sign(
+            { userId: profile.id },
+            "aksdfjasdfsdifrifieowmcei",
+            { expiresIn: "1y" }
+          ),
         });
         User = db.collection("users").doc(profile.id);
         User.set({
@@ -49,17 +53,13 @@ const todos: Array<{ text: string; completed: boolean }> = [
     )
   );
 
-  // db.collection("users").doc("rosekamallove").set({
-  //   todos,
-  // });
-
   app.get("/auth/github", passport.authenticate("github", { session: false }));
 
   app.get(
     "/auth/github/callback",
     passport.authenticate("github", { session: false }),
-    (_req, res) => {
-      res.send("logged in succesfully");
+    (req: any, res) => {
+      res.redirect(`http://localhost:54321/auth/${req.user.accesToken}`);
     }
   );
 
