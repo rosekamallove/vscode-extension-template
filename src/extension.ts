@@ -1,9 +1,12 @@
 import * as vscode from "vscode";
 import { HelloWorldPanel } from "./HelloWorldPanel";
+import { SidebarProvider } from "./SidebarProvider";
 
 export function activate(context: vscode.ExtensionContext) {
-  console.log('Congratulations, your extension "vodoo" is now active!');
-
+  const sidebarProvider = new SidebarProvider(context.extensionUri);
+  context.subscriptions.push(
+    vscode.window.registerWebviewViewProvider("vodoo-sidebar", sidebarProvider)
+  );
   context.subscriptions.push(
     vscode.commands.registerCommand("vodoo.helloWorld", () => {
       HelloWorldPanel.createOrShow(context.extensionUri);
@@ -11,9 +14,13 @@ export function activate(context: vscode.ExtensionContext) {
   );
 
   context.subscriptions.push(
-    vscode.commands.registerCommand("vodoo.refresh", () => {
-      HelloWorldPanel.kill();
-      HelloWorldPanel.createOrShow(context.extensionUri);
+    vscode.commands.registerCommand("vodoo.refresh", async () => {
+      //HelloWorldPanel.kill();
+      //HelloWorldPanel.createOrShow(context.extensionUri);
+      await vscode.commands.executeCommand("workbench.action.closeSidebar");
+      await vscode.commands.executeCommand(
+        "workbench.view.extension.vodoo-sidebar-view"
+      );
       setTimeout(() => {
         vscode.commands.executeCommand(
           "workbench.action.webview.openDeveloperTools"
