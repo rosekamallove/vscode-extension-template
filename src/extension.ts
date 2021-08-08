@@ -11,6 +11,12 @@ export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(
     vscode.commands.registerCommand("vodoo.addTodo", () => {
       const { activeTextEditor } = vscode.window;
+      const item = vscode.window.createStatusBarItem(
+        vscode.StatusBarAlignment.Right
+      );
+      item.text = "$(add) Add Todo";
+      item.show();
+      item.command = "vodoo.addTodo";
       if (!activeTextEditor) {
         vscode.window.showErrorMessage("Nothing selected from the editor");
         return;
