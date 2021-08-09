@@ -4,6 +4,7 @@ import admin from "firebase-admin";
 import jwt from "jsonwebtoken";
 import passport from "passport";
 import { Strategy as GitHubStrategy } from "passport-github";
+import { isAuth } from "./isAuth";
 require("dotenv-safe");
 require("dotenv").config();
 
@@ -12,11 +13,8 @@ admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
 });
 
-const todos: Array<{ text: string; completed: boolean }> = [
-  { text: "five", completed: false },
-  { text: "six", completed: false },
-  { text: "seven", completed: false },
-  { text: "eight", completed: false },
+const _exampleTodos: Array<{ text: string; completed: boolean }> = [
+  { completed: false, text: "example todo" },
 ];
 
 const db = admin.firestore();
@@ -30,6 +28,7 @@ let User: any;
 
   app.use(cors({ origin: "*" }));
   app.use(passport.initialize());
+  app.use(express.json());
 
   passport.use(
     new GitHubStrategy(
@@ -87,13 +86,23 @@ let User: any;
       {
         name: "Rose Kamal Love",
         userId,
-        todos,
       },
       { merge: true }
     );
     const userData = await User.get();
     const user = userData.data();
     res.send({ user });
+  });
+
+  app.post("/todo", isAuth, async (req: any, _res) => {
+    const todo = { text: req.body.text, completed: req.body.completed };
+    db.collection("users")
+      .doc(req.userId)
+      .update({
+        todos: admin.firestore.FieldValue.arrayUnion(todo),
+        userId: req.userId,
+      });
+    _res.send({ todo });
   });
 
   app.get("/", (_req, res) => {

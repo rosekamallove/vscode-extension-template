@@ -60,7 +60,7 @@ export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(
     vscode.commands.registerCommand("vodoo.authenticate", () => {
       try {
-        authenticate();
+        authenticate(() => {});
       } catch (err) {
         console.log(err);
       }
@@ -73,6 +73,7 @@ export function activate(context: vscode.ExtensionContext) {
   );
   item.text = "$(add) Add Todo";
   item.show();
+  item.command = "vodoo.addTodo";
 
   context.subscriptions.push(
     vscode.commands.registerCommand("vodoo.addTodo", () => {
@@ -80,7 +81,6 @@ export function activate(context: vscode.ExtensionContext) {
        *  => Adding Todos form the Selected Text from active editor
        */
       const { activeTextEditor } = vscode.window;
-      item.command = "vodoo.addTodo";
       if (!activeTextEditor) {
         vscode.window.showErrorMessage("Nothing selected from the editor");
         return;

@@ -3,7 +3,7 @@ import * as vscode from "vscode";
 import { apiBaseUrl } from "./constants";
 import { TokenManager } from "./TokenManager";
 
-export const authenticate = (fn: () => void) => {
+export const authenticate = (cb: () => void) => {
   const app = polka();
 
   app.get(`/auth/:token`, async (req, res) => {
@@ -17,7 +17,7 @@ export const authenticate = (fn: () => void) => {
     }
 
     await TokenManager.setToken(token);
-    fn();
+    cb();
 
     res.end(`<head><meta charset="UTF-8"></head>
               <h1 style="text-align:center;">
