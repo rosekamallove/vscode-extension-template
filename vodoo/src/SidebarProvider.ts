@@ -30,6 +30,10 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
        * but from the @JS of the extension
        */
       switch (data.type) {
+        case "logout": {
+          TokenManager.setToken("");
+          break;
+        }
         case "authenticate": {
           authenticate();
           break;

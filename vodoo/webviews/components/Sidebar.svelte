@@ -36,11 +36,14 @@
 
   {#if loading}
     <div class="loading">Loading...</div>
-  {:else if !loading}
-    {#if user != null}
-      <Todos {user} />
-      <button on:click={() => {}}>Logout</button>
-    {/if}
+  {:else if user}
+    <Todos {user} />
+    <button
+      on:click={() => {
+        (user = null), (accessToken = "");
+        tsvscode.postMessage({ type: "logout", value: undefined });
+      }}>Logout</button
+    >
   {:else}
     <button
       on:click={() => {
@@ -56,6 +59,7 @@
     transition: 0.5s;
     box-shadow: rgba(0, 0, 0, 0.25) 0px 6px 12px -2px,
       rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+    margin-top: 10px;
   }
   .loading {
     padding: 5px;
