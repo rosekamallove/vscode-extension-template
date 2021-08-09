@@ -1,4 +1,5 @@
 import * as vscode from "vscode";
+import { authenticate } from "./authenticate";
 import { apiBaseUrl } from "./constants";
 import { getNonce } from "./getNonce";
 import { TokenManager } from "./TokenManager";
@@ -23,8 +24,16 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
       /**
        * Post Messages form @JS
        * See the @switch_case
+       *
+       * Post message can also be used to
+       * do stuff that the extension would do
+       * but from the @JS of the extension
        */
       switch (data.type) {
+        case "authenticate": {
+          authenticate();
+          break;
+        }
         case "get-token": {
           webviewView.webview.postMessage({
             type: "token",
