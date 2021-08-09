@@ -34,7 +34,7 @@ const todos: Array<{ text: string; completed: boolean }> = [
       {
         clientID: process.env.GITHUB_CLIENT_ID,
         clientSecret: process.env.GITHUB_CLIENT_SECRET,
-        callbackURL: "http://127.0.0.1:3001/auth/github/callback",
+        callbackURL: "http://localhost:3001/auth/github/callback",
       },
       (_, __, profile, cb) => {
         console.log(profile);
@@ -68,6 +68,6 @@ const todos: Array<{ text: string; completed: boolean }> = [
   });
 
   app.listen(3001, () => {
-    console.log("listening on 3001");
+    console.log("listening on http://localhost:3001");
   });
 })();

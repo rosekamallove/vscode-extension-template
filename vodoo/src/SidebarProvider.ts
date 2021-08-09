@@ -1,25 +1,27 @@
 import * as vscode from "vscode";
 import { getNonce } from "./getNonce";
 
+/**
+ * Create the @sidebarView
+ * (like a typical extension)
+ */
+
 export class SidebarProvider implements vscode.WebviewViewProvider {
   _view?: vscode.WebviewView;
   _doc?: vscode.TextDocument;
-
   constructor(private readonly _extensionUri: vscode.Uri) {}
-
   public resolveWebviewView(webviewView: vscode.WebviewView) {
     this._view = webviewView;
-
     webviewView.webview.options = {
-      // Allow scripts in the webview
       enableScripts: true,
-
       localResourceRoots: [this._extensionUri],
     };
-
     webviewView.webview.html = this._getHtmlForWebview(webviewView.webview);
-
     webviewView.webview.onDidReceiveMessage(async (data) => {
+      /**
+       * Post Messages form @JS
+       * See the @switch_case
+       */
       switch (data.type) {
         case "onInfo": {
           if (!data.value) {
@@ -44,13 +46,14 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
   }
 
   private _getHtmlForWebview(webview: vscode.Webview) {
+    /** @VSCode */
     const styleResetUri = webview.asWebviewUri(
       vscode.Uri.joinPath(this._extensionUri, "media", "reset.css")
     );
     const styleVSCodeUri = webview.asWebviewUri(
       vscode.Uri.joinPath(this._extensionUri, "media", "vscode.css")
     );
-
+    /** @Custom */
     const scriptUri = webview.asWebviewUri(
       vscode.Uri.joinPath(this._extensionUri, "out", "compiled/sidebar.js")
     );
@@ -58,7 +61,11 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
       vscode.Uri.joinPath(this._extensionUri, "out", "compiled/sidebar.css")
     );
 
-    // Use a nonce to only allow a specific script to be run.
+    /**
+     * Use a nonce to only allow a specific script to be run.
+     * ? Number Only Used Once
+     * basically a @unique_key
+     */
     const nonce = getNonce();
 
     return `<!DOCTYPE html>
@@ -68,8 +75,8 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
 				<!--
 					Use a content security policy to only allow loading images from https or from our extension directory,
 					and only allow scripts that have a specific nonce.
+          <meta http-equiv="Content-Security-Policy" content="img-src https: data:; style-src 'unsafe-inline' ${webview.cspSource}; script-src 'nonce-${nonce}';">
         -->
-        <meta http-equiv="Content-Security-Policy" content="img-src https: data:; style-src 'unsafe-inline' ${webview.cspSource}; script-src 'nonce-${nonce}';">
 				<meta name="viewport" content="width=device-width, initial-scale=1.0">
 				<link href="${styleResetUri}" rel="stylesheet">
 				<link href="${styleVSCodeUri}" rel="stylesheet">
