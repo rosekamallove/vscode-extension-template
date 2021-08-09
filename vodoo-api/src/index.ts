@@ -1,3 +1,4 @@
+import cors from "cors";
 import express from "express";
 import admin from "firebase-admin";
 import jwt from "jsonwebtoken";
@@ -11,6 +12,13 @@ admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
 });
 
+const todos: Array<{ text: string; completed: boolean }> = [
+  { text: "five", completed: false },
+  { text: "six", completed: false },
+  { text: "seven", completed: false },
+  { text: "eight", completed: false },
+];
+
 const db = admin.firestore();
 let User: any;
 
@@ -20,6 +28,7 @@ let User: any;
     done(null, user.accesToken);
   });
 
+  app.use(cors({ origin: "*" }));
   app.use(passport.initialize());
 
   passport.use(
@@ -38,7 +47,6 @@ let User: any;
             { expiresIn: "1y" }
           ),
         });
-        User = db.collection("users").doc(profile.id);
       }
     )
   );
@@ -53,7 +61,7 @@ let User: any;
     }
   );
 
-  app.get("me", async (req, res) => {
+  app.get("/me", async (req, res) => {
     /* Bearer skdjfalsfkajsf */
     const authHeader = req.headers.authorization;
     if (!authHeader) {
@@ -74,7 +82,17 @@ let User: any;
       res.send({ user: null });
       return;
     }
-    const user = User.doc(userId);
+    User = db.collection("users").doc(userId);
+    User.set(
+      {
+        name: "Rose Kamal Love",
+        userId,
+        todos,
+      },
+      { merge: true }
+    );
+    const userData = await User.get();
+    const user = userData.data();
     res.send({ user });
   });
 
