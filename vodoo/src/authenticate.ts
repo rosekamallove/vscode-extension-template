@@ -1,6 +1,7 @@
 import * as polka from "polka";
 import * as vscode from "vscode";
 import { apiBaseUrl } from "./constants";
+import { TokenManager } from "./TokenManager";
 
 export const authenticate = () => {
   const app = polka();
@@ -14,11 +15,15 @@ export const authenticate = () => {
                 </h1>`);
       return;
     }
-    console.log(token);
+
+    await TokenManager.setToken(token);
+
     res.end(`<head><meta charset="UTF-8"></head>
               <h1 style="text-align:center;">
                 Auth was Sucessfull 🚀
               </h1>`);
+
+    (app as any).server?.close();
   });
 
   app.listen(54321, (err: Error) => {

@@ -2,6 +2,7 @@ import * as vscode from "vscode";
 import { authenticate } from "./authenticate";
 import { HelloWorldPanel } from "./HelloWorldPanel";
 import { SidebarProvider } from "./SidebarProvider";
+import { TokenManager } from "./TokenManager";
 
 /**
  * To Run the extension, press F5
@@ -44,6 +45,10 @@ export function activate(context: vscode.ExtensionContext) {
       }
     })
   );
+
+  TokenManager.globalState = context.globalState;
+
+  console.log("Token is:" + TokenManager.getToken());
 
   const sidebarProvider = new SidebarProvider(context.extensionUri);
   /* Creates the Todo Sidebar View (typical extension view) */
