@@ -105,6 +105,17 @@ let User: any;
     _res.send({ todo });
   });
 
+  app.put("/todo-update", isAuth, async (req: any, _res) => {
+    const todo = { text: req.body.text, completed: req.body.completed };
+    db.collection("users")
+      .doc(req.userId)
+      .update({
+        todos: admin.firestore.FieldValue.arrayUnion(todo),
+        userId: req.userId,
+      });
+    _res.send({ todo });
+  });
+
   app.get("/", (_req, res) => {
     res.send("hello");
   });

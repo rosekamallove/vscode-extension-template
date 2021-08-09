@@ -26,6 +26,23 @@
     todos = [todo, ...todos];
   }
 
+  async function updateTodo(txt: string) {
+    if (!txt) return;
+    const response = await fetch(`${apiBaseUrl}/todo-update`, {
+      method: "PUT",
+      body: JSON.stringify({
+        text: txt,
+        completed: true,
+      }),
+      headers: {
+        "content-type": "application/json",
+        authorization: `Bearer ${accessToken}`,
+      },
+    });
+    const { todo } = await response.json();
+    todos = [todo, ...todos];
+  }
+
   window.addEventListener("message", async (e) => {
     const message = e.data;
     switch (message.type) {
@@ -52,6 +69,7 @@
       <li
         class:complete={todo.completed}
         on:click={() => {
+          updateTodo(text);
           todo.completed = !todo.completed;
         }}
       >
