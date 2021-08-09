@@ -1,24 +1,34 @@
 <script lang="ts">
   import { onMount } from "svelte";
 
+  let accessToken = "";
   let todos: Array<{ text: string; completed: boolean }> = [];
   let text = "";
   let loading = true;
   let user: { name: string; id: string } | null = null;
 
-  onMount(async () => {
-    window.addEventListener("message", (e) => {
+  onMount(() => {
+    window.addEventListener("message", async (e) => {
       const message = e.data;
       switch (message.type) {
         case "add-todo":
           todos = [{ text: message.value, completed: false }, ...todos];
+        case "token":
+          accessToken = message.value;
+          const response = await fetch(`${apiBaseUrl}/me`, {
+            headers: {
+              authorization: `Bearer ${accessToken}`,
+            },
+          });
+          const data = await response.json();
+          user = data.user;
+          todos = data.user.todos;
+          console.log(user);
+          loading = false;
       }
     });
 
-    const response = await fetch(`${apiBaseUrl}/me`);
-    const data = await response.json();
-    user = data.user;
-    loading = false;
+    tsvscode.postMessage({ type: "get-token", value: undefined });
   });
 </script>
 

@@ -1,6 +1,7 @@
 import * as vscode from "vscode";
 import { apiBaseUrl } from "./constants";
 import { getNonce } from "./getNonce";
+import { TokenManager } from "./TokenManager";
 
 /**
  * Create the @sidebarView
@@ -24,6 +25,13 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
        * See the @switch_case
        */
       switch (data.type) {
+        case "get-token": {
+          webviewView.webview.postMessage({
+            type: "token",
+            value: TokenManager.getToken(),
+          });
+          break;
+        }
         case "onInfo": {
           if (!data.value) {
             return;
