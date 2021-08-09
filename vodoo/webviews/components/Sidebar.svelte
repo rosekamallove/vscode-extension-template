@@ -3,8 +3,10 @@
 
   let todos: Array<{ text: string; completed: boolean }> = [];
   let text = "";
+  let loading = true;
+  let user: { name: string; id: string } | null = null;
 
-  onMount(() => {
+  onMount(async () => {
     window.addEventListener("message", (e) => {
       const message = e.data;
       switch (message.type) {
@@ -12,6 +14,11 @@
           todos = [{ text: message.value, completed: false }, ...todos];
       }
     });
+
+    const response = await fetch(`${apiBaseUrl}/me`);
+    const data = await response.json();
+    user = data.user;
+    loading = false;
   });
 </script>
 
@@ -27,6 +34,16 @@
   >
     <input bind:value={text} type="text" />
   </form>
+
+  {#if loading}
+    <div>loading...</div>
+  {:else if !loading}
+    {#if user != null}
+      <pre>{JSON.stringify(user, null, 1)}</pre>
+    {/if}
+  {:else}
+    <div>No user is logged in...</div>
+  {/if}
 
   <!-- Rendering the todos -->
   <ul>
