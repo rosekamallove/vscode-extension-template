@@ -12,14 +12,7 @@ admin.initializeApp({
 });
 
 const db = admin.firestore();
-let User;
-
-const todos: Array<{ text: string; completed: boolean }> = [
-  { text: "five", completed: false },
-  { text: "six", completed: false },
-  { text: "seven", completed: false },
-  { text: "eight", completed: false },
-];
+let User: any;
 
 (async () => {
   const app = express();
@@ -41,14 +34,11 @@ const todos: Array<{ text: string; completed: boolean }> = [
         cb(null, {
           accesToken: jwt.sign(
             { userId: profile.id },
-            "aksdfjasdfsdifrifieowmcei",
+            process.env.ACCESS_TOKEN_SECRET,
             { expiresIn: "1y" }
           ),
         });
         User = db.collection("users").doc(profile.id);
-        User.set({
-          todos,
-        });
       }
     )
   );
@@ -62,6 +52,31 @@ const todos: Array<{ text: string; completed: boolean }> = [
       res.redirect(`http://localhost:54321/auth/${req.user.accesToken}`);
     }
   );
+
+  app.get("me", async (req, res) => {
+    /* Bearer skdjfalsfkajsf */
+    const authHeader = req.headers.authorization;
+    if (!authHeader) {
+      res.send({ user: null });
+      return;
+    }
+    const token = authHeader.split(" ")[1];
+    if (!token) {
+      res.send({ user: null });
+      return;
+    }
+
+    let userId = "";
+    try {
+      const payload: any = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+      userId = payload.userId;
+    } catch (err) {
+      res.send({ user: null });
+      return;
+    }
+    const user = User.doc(userId);
+    res.send({ user });
+  });
 
   app.get("/", (_req, res) => {
     res.send("hello");
