@@ -87,10 +87,9 @@
     text-decoration: line-through;
   }
   input[type="text"] {
-    /* background-color: #282c34; */
     border-radius: 5px;
-    box-shadow: rgba(0, 0, 0, 0.25) 0px 6px 12px -2px,
-      rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,
+      rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
   }
   ul {
     list-style: none;
@@ -99,18 +98,16 @@
     padding: 0;
   }
   li {
-    /* background-color: #282c34; */
-    box-shadow: rgba(0, 0, 0, 0.25) 0px 6px 12px -2px,
-      rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
-    width: 100%;
     padding: 5px;
     margin: 10px;
     margin-right: 20px;
     border-radius: 5px;
-    transition: 0.5s;
+    transition: 0.3s;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,
+      rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
   }
   li:hover {
-    box-shadow: rgba(0, 0, 0, 0.25) 0px 50px 100px -20px,
-      rgba(0, 0, 0, 0.3) 0px 30px 60px -30px;
+    box-shadow: rgba(0, 0, 0, 0.25) 0px 6px 12px -2px,
+      rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
   }
 </style>
