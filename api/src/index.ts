@@ -13,10 +13,6 @@ admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
 });
 
-const _exampleTodos: Array<{ text: string; completed: boolean }> = [
-  { completed: false, text: "example todo" },
-];
-
 const db = admin.firestore();
 let User: any;
 

@@ -26,7 +26,6 @@
           loading = false;
       }
     });
-
     tsvscode.postMessage({ type: "get-token", value: undefined });
   });
 </script>

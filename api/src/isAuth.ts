@@ -12,7 +12,6 @@ export const isAuth: RequestHandler<{}, any, any, {}> = (req, __, next) => {
   if (!token) {
     throw new Error("not authenticated");
   }
-  let userId = "";
   try {
     const payload: any = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
     (req as any).userId = payload.userId;
